@@ -31,7 +31,7 @@ func configureAPI(api *operations.TodoListAPI) http.Handler {
 	// Controllers
 	todoListController := controllers.TodoListController{}
 
-	// APIs
+	// API Handlers
 	api.TodosGetTodosHandler = todos.GetTodosHandlerFunc(todoListController.GetTodoList)
 	api.TodosAddOneHandler = todos.AddOneHandlerFunc(todoListController.AddTodoItem)
 

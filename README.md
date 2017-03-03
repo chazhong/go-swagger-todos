@@ -33,7 +33,7 @@ func (c *TodoListController) AddTodoItem(params todos.AddOneParams) middleware.R
 
 ```
 
-## Set API Handers
+## Set API Handlers
 ```javascript
 // configure_todo_list.go
 func configureAPI(api *operations.TodoListAPI) http.Handler {
@@ -41,7 +41,7 @@ func configureAPI(api *operations.TodoListAPI) http.Handler {
     // Controllers
     todoListController := controllers.TodoListController{}
 
-    // APIs
+    // API Handlers
     api.TodosGetTodosHandler = todos.GetTodosHandlerFunc(todoListController.GetTodoList)
     api.TodosAddOneHandler = todos.AddOneHandlerFunc(todoListController.AddTodoItem)
     ...
