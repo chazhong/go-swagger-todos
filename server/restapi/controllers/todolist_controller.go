@@ -6,10 +6,10 @@ import (
 
 	errors "github.com/go-openapi/errors"
 
-	"github.com/go-openapi/runtime/middleware"
-	"github.com/go-openapi/swag"
 	"github.com/chazhong/go-swagger-todos/server/models"
 	"github.com/chazhong/go-swagger-todos/server/restapi/operations/todos"
+	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/swag"
 )
 
 var todoList = make(map[int64]*models.Item)
