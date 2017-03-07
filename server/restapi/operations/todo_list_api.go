@@ -37,6 +37,9 @@ func NewTodoListAPI(spec *loads.Document) *TodoListAPI {
 		TodosAddOneHandler: todos.AddOneHandlerFunc(func(params todos.AddOneParams) middleware.Responder {
 			return middleware.NotImplemented("operation TodosAddOne has not yet been implemented")
 		}),
+		TodosDestroyOneHandler: todos.DestroyOneHandlerFunc(func(params todos.DestroyOneParams) middleware.Responder {
+			return middleware.NotImplemented("operation TodosDestroyOne has not yet been implemented")
+		}),
 	}
 }
 
@@ -59,6 +62,8 @@ type TodoListAPI struct {
 	TodosGetTodosHandler todos.GetTodosHandler
 	// TodosAddOneHandler sets the operation handler for the add one operation
 	TodosAddOneHandler todos.AddOneHandler
+	// TodosDestroyOneHandler sets the operation handler for the destroy one operation
+	TodosDestroyOneHandler todos.DestroyOneHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -128,6 +133,10 @@ func (o *TodoListAPI) Validate() error {
 
 	if o.TodosAddOneHandler == nil {
 		unregistered = append(unregistered, "todos.AddOneHandler")
+	}
+
+	if o.TodosDestroyOneHandler == nil {
+		unregistered = append(unregistered, "todos.DestroyOneHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -219,6 +228,11 @@ func (o *TodoListAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/todos"] = todos.NewAddOne(o.context, o.TodosAddOneHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/todos/{id}"] = todos.NewDestroyOne(o.context, o.TodosDestroyOneHandler)
 
 }
 

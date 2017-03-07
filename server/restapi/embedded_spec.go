@@ -93,6 +93,34 @@ func init() {
           }
         }
       }
+    },
+    "/todos/{id}": {
+      "delete": {
+        "tags": [
+          "todos"
+        ],
+        "operationId": "destroyOne",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

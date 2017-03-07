@@ -20,11 +20,26 @@ func addItem(item *models.Item) error {
 	if item == nil {
 		return errors.New(500, "item must be present")
 	}
+
 	lock.Lock()
 	defer lock.Unlock()
+
 	newID := atomic.AddInt64(&lastID, 1)
 	item.ID = newID
 	todoList[newID] = item
+	return nil
+}
+
+func deleteItem(id int64) error {
+	lock.Lock()
+	defer lock.Unlock()
+
+	_, exists := todoList[id]
+	if !exists {
+		return errors.NotFound("not found: item %d", id)
+	}
+
+	delete(todoList, id)
 	return nil
 }
 
@@ -44,4 +59,11 @@ func (c *TodoListController) AddTodoItem(params todos.AddOneParams) middleware.R
 		return todos.NewAddOneDefault(500).WithPayload(&models.Error{Code: 500, Message: swag.String(err.Error())})
 	}
 	return todos.NewAddOneCreated().WithPayload(params.Body)
+}
+
+func (c *TodoListController) DeleteTodoItem(params todos.DestroyOneParams) middleware.Responder {
+	if err := deleteItem(params.ID); err != nil {
+		return todos.NewDestroyOneDefault(500).WithPayload(&models.Error{Code: 500, Message: swag.String(err.Error())})
+	}
+	return todos.NewDestroyOneNoContent()
 }
