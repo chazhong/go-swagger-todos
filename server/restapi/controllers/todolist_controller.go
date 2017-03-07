@@ -43,6 +43,24 @@ func deleteItem(id int64) error {
 	return nil
 }
 
+func updateItem(id int64, item *models.Item) error {
+	if item == nil {
+		return errors.New(500, "item must be present")
+	}
+
+	lock.Lock()
+	defer lock.Unlock()
+
+	_, exists := todoList[id]
+	if !exists {
+		return errors.NotFound("not found: item %d", id)
+	}
+
+	item.ID = id
+	todoList[id] = item
+	return nil
+}
+
 type TodoListController struct {
 }
 
@@ -66,4 +84,11 @@ func (c *TodoListController) DeleteTodoItem(params todos.DestroyOneParams) middl
 		return todos.NewDestroyOneDefault(500).WithPayload(&models.Error{Code: 500, Message: swag.String(err.Error())})
 	}
 	return todos.NewDestroyOneNoContent()
+}
+
+func (c *TodoListController) UpdateTodoItem(params todos.UpdateOneParams) middleware.Responder {
+	if err := updateItem(params.ID, params.Body); err != nil {
+		return todos.NewUpdateOneDefault(500).WithPayload(&models.Error{Code: 500, Message: swag.String(err.Error())})
+	}
+	return todos.NewUpdateOneOK().WithPayload(params.Body)
 }

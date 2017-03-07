@@ -35,6 +35,7 @@ func configureAPI(api *operations.TodoListAPI) http.Handler {
 	api.TodosGetTodosHandler = todos.GetTodosHandlerFunc(todoListController.GetTodoList)
 	api.TodosAddOneHandler = todos.AddOneHandlerFunc(todoListController.AddTodoItem)
 	api.TodosDestroyOneHandler = todos.DestroyOneHandlerFunc(todoListController.DeleteTodoItem)
+	api.TodosUpdateOneHandler = todos.UpdateOneHandlerFunc(todoListController.UpdateTodoItem)
 
 	api.ServerShutdown = func() {}
 

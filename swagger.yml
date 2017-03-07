@@ -54,19 +54,37 @@ paths:
           schema:
             $ref: "#/definitions/error"
   /todos/{id}:
+    parameters:
+      - type: integer
+        format: int64
+        name: id
+        in: path
+        required: true
     delete:
       tags:
         - todos
       operationId: destroyOne
-      parameters:
-        - type: integer
-          format: int64
-          name: id
-          in: path
-          required: true
       responses:
         204:
           description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    put:
+      tags:
+        - todos
+      operationId: updateOne
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/item"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/item"
         default:
           description: error
           schema:
