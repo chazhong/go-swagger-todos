@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: The product of a tutorial on goswagger.io
   title: A To Do list application
-  version: 1.0.0
+  version: 1.0.1
 consumes:
 - application/json
 produces:
